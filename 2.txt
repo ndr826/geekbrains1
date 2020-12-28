@@ -1,0 +1,108 @@
+root@ubuntu:~# ls /etc
+
+
+
+
+root@ubuntu:~# ls /proc
+
+
+root@ubuntu:~# ls /home
+ndr
+
+root@ubuntu:/home/ndr# vim /etc/hostsls
+
+
+
+vim /etc/os-release
+
+
+
+root@ubuntu:/home/ndr# cat > test1
+test
+test
+testroot@ubuntu:/home/ndr# ls
+HkMysql.sql  example.sql  test  test1
+root@ubuntu:/home/ndr# cat test
+cdscsdcdsco
+asadklsadk
+!ddsde#
+root@ubuntu:/home/ndr# cat test1
+test
+test
+
+
+
+root@ubuntu:/home/ndr# cat test test1 > test2
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  example.sql  test  test1  test2
+root@ubuntu:/home/ndr# cat test2
+cdscsdcdsco
+asadklsadk
+!ddsde#
+test
+test
+
+
+root@ubuntu:/home/ndr# mv ./test2 test3
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  example.sql  test  test1  test3
+
+touch test{4..8}
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  example.sql  test  test1  test3  test4  test5  test6  test7  test8
+
+root@ubuntu:/home/ndr# mkdir TEST
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  TEST  example.sql  test  test1  test3  test4  test5  test6  test7  test8
+
+
+root@ubuntu:/home/ndr# mv test{1..8} TEST
+mv: cannot stat 'test2': No such file or directory
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  TEST  example.sql  test
+
+root@ubuntu:/home/ndr# rm -R TEST
+root@ubuntu:/home/ndr# ls
+HkMysql.sql  example.sql  test
+
+
+
+root@ubuntu:/home/ndr# ls -A | grep -P "^\."
+.bash_history
+.bash_logout
+.bashrc
+.cache
+.profile
+.sudo_as_admin_successful
+root@ubuntu:/home/ndr# ls -A | grep -P "^\." | wc
+      6       6      77
+root@ubuntu:/home/ndr# ls -A | grep -P "^\." | wc -l
+6
+
+
+
+root@ubuntu:/home/ndr# cat /etc/* 2> test1 | wc -l
+5922
+
+root@ubuntu:/home/ndr# ps -ef | grep mc
+root        7562    7533  0 12:36 pts/1    00:00:00 mc
+root        7573    1124  0 12:36 pts/0    00:00:00 grep --color=auto mc
+
+root@ubuntu:/home/ndr# kill -9 7562
+root@ubuntu:/home/ndr#
+
+root@ubuntu:/home/ndr# pkill -9 mc
+root@ubuntu:/home/ndr#
+
+ ls -la /etc | grep -v '^total|.*|..' | cut -d ' ' -f 1 | sort -r | uniq | wc -l
+10
+
+
+
+
+
+
+
+
+
+
