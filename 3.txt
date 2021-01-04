@@ -1,0 +1,209 @@
+root@ubuntu:~# touch file
+
+root@ubuntu:~# ls --help > file
+
+root@ubuntu:~# cp file file1
+
+root@ubuntu:~# ls
+file  file1  snap
+
+
+root@ubuntu:~# ln -s file file2
+
+root@ubuntu:~# ls -li
+total 20
+1050346 -rw-r--r-- 1 root root 7644 Jan  4 14:36 file
+1052550 -rw-r--r-- 1 root root 7644 Jan  4 14:37 file1
+1052950 lrwxrwxrwx 1 root root    4 Jan  4 14:40 file2 -> file
+ 399380 drwxr-xr-x 3 root root 4096 Dec 23 11:04 snap
+
+root@ubuntu:~# ln file1 file3
+
+root@ubuntu:~# ls -li
+total 28
+1050346 -rw-r--r-- 1 root root 7644 Jan  4 14:36 file
+1052550 -rw-r--r-- 2 root root 7644 Jan  4 14:37 file1
+1052950 lrwxrwxrwx 1 root root    4 Jan  4 14:40 file2 -> file
+1052550 -rw-r--r-- 2 root root 7644 Jan  4 14:37 file3
+ 399380 drwxr-xr-x 3 root root 4096 Dec 23 11:04 snap
+
+root@ubuntu:~# ls -i
+1050346 file  1052550 file1  1052950 file2  1052550 file3   399380 snap
+
+root@ubuntu:~# rm file
+
+root@ubuntu:~# ls
+file1  file2  file3  snap
+
+root@ubuntu:~# cat file2
+cat: file2: No such file or directory
+
+root@ubuntu:~# cat file3
+Usage: ls [OPTION]... [FILE]...
+List information about the FILEs (the current directory by default).
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -a, --all                  do not ignore entries starting with .
+  -A, --almost-all           do not list implied . and ..
+      --author               with -l, print the author of each file
+  -b, --escape               print C-style escapes for nongraphic characters
+      --block-size=SIZE      with -l, scale sizes by SIZE when printing them;
+                               e.g., '--block-size=M'; see SIZE format below
+  -B, --ignore-backups       do not list implied entries ending with ~
+  -c                         with -lt: sort by, and show, ctime (time of last
+                               modification of file status information);
+                               with -l: show ctime and sort by name;
+                               otherwise: sort by ctime, newest first
+  -C                         list entries by columns
+      --color[=WHEN]         colorize the output; WHEN can be 'always' (default
+                               if omitted), 'auto', or 'never'; more info below
+  -d, --directory            list directories themselves, not their contents
+  -D, --dired                generate output designed for Emacs' dired mode
+  -f                         do not sort, enable -aU, disable -ls --color
+  -F, --classify             append indicator (one of */=>@|) to entries
+      --file-type            likewise, except do not append '*'
+      --format=WORD          across -x, commas -m, horizontal -x, long -l,
+                               single-column -1, verbose -l, vertical -C
+      --full-time            like -l --time-style=full-iso
+  -g                         like -l, but do not list owner
+      --group-directories-first
+
+===========================================================================================================================
+
+root@ubuntu:~# mv file1 test1
+
+root@ubuntu:~# mv file3 test3
+
+root@ubuntu:~# ln -s test1 test8
+
+root@ubuntu:~# ln test3 test9
+
+root@ubuntu:~# mv test8 ./test/test8
+
+root@ubuntu:~# mv test9 ./test/test9
+root@ubuntu:~# ls
+file2  snap  test  test1  test3
+
+root@ubuntu:~# ls ./test
+test8  test9
+
+
+root@ubuntu:~# touch user
+root@ubuntu:~# touch user1
+root@ubuntu:~# ls
+file2  snap  test  test1  test3  user  user1
+
+root@ubuntu:~# ls -l | grep user
+-rw-r--r-- 1 root root    0 Jan  4 15:01 user
+-rw-r--r-- 1 root root    0 Jan  4 15:01 user1
+
+
+root@ubuntu:~# chmod ug+rw user
+root@ubuntu:~# chmod o+r user
+root@ubuntu:~# ls -l | grep user
+-rw-rw-r-- 1 root root    0 Jan  4 15:01 user
+-rw-r--r-- 1 root root    0 Jan  4 15:01 user1
+
+root@ubuntu:~# chmod 664 user
+root@ubuntu:~# ls -l | grep user
+-rw-rw-r-- 1 root root    0 Jan  4 15:01 user
+-rw-r--r-- 1 root root    0 Jan  4 15:01 user1
+
+
+root@ubuntu:~# chmod go-r user1
+root@ubuntu:~# ls -l | grep user1
+-rw------- 1 root root    0 Jan  4 15:01 user1
+
+root@ubuntu:~# chmod 600 user1
+root@ubuntu:~# ls -l | grep user1
+-rw------- 1 root root    0 Jan  4 15:01 user1
+
+======================================================================================================
+
+root@ubuntu:~# adduser test
+root@ubuntu:~# usermod -aG sudo test
+
+======================================================================================================
+
+root@ubuntu:~# addgroup developer
+Adding group `developer' (GID 1002) ...
+Done.
+
+root@ubuntu:~# adduser dev0
+usermod -aG developer dev0
+
+root@ubuntu:~# adduser dev1
+usermod -aG developer dev1
+
+root@ubuntu:~# useradd dev3 -g developer
+root@ubuntu:~# passwd dev3
+
+root@ubuntu:~# mkdir /usr/develop
+
+root@ubuntu:/usr# ls -l | grep dev
+drwxr-xr-x   2 root root  4096 Jan  4 15:52 develop
+root@ubuntu:/usr#
+
+
+root@ubuntu:/usr# cd develop/
+root@ubuntu:/usr/develop# touch file
+
+root@ubuntu:/usr/develop# chown root:developer /usr/develop
+root@ubuntu:/usr/develop# ls -l | grep dev
+root@ubuntu:/usr/develop# cd ..
+root@ubuntu:/usr# ls -l | grep dev
+drwxr-xr-x   2 root developer  4096 Jan  4 15:58 develop
+
+root@ubuntu:/usr# chmod 674 /usr/develop/
+
+==================================================================================================================
+
+root@ubuntu:/usr/develop# mkdir test
+
+root@ubuntu:/usr/develop# chmod +t /usr/develop/test/
+root@ubuntu:/usr/develop# ls
+file  test
+root@ubuntu:/usr/develop# ls -l
+total 8
+-rw-r--r-- 1 dev0 dev0         6 Jan  4 17:03 file
+drw-rwxr-T 2 root developer 4096 Jan  4 17:12 test
+================================================================================================================
+
+root@ubuntu:/usr/develop# mkdir test2
+root@ubuntu:/usr/develop# ls -l
+total 12
+-rw-r--r-- 1 dev0 dev0         6 Jan  4 17:03 file
+drw-rwxr-T 2 root developer 4096 Jan  4 17:23 test
+drwxr-xr-x 2 root root      4096 Jan  4 17:30 test2
+
+root@ubuntu:/usr/develop# chown root:developer /usr/develop/test2/
+root@ubuntu:/usr/develop# ls -l
+total 12
+-rw-r--r-- 1 dev0 dev0         6 Jan  4 17:03 file
+drw-rwxr-T 2 root developer 4096 Jan  4 17:23 test
+drwxr-xr-x 2 root developer 4096 Jan  4 17:30 test2
+
+root@ubuntu:/usr/develop# cd test2
+
+root@ubuntu:/usr/develop/test2# ls
+root@ubuntu:/usr/develop/test2# touch 1
+root@ubuntu:/usr/develop/test2# ls -l
+total 0
+-rw-r--r-- 1 root root 0 Jan  4 17:33 1
+
+root@ubuntu:/usr/develop# chmod -R 734 /usr/develop/test2
+root@ubuntu:/usr/develop#
+
+
+
+
+
+
+
+
+
+
+
+
+
