@@ -1,0 +1,50 @@
+root@ubuntu:/home/ndr# cat test
+GDFGFD   GDFGFDGFD
+asadklgfd    gfdGFDGDFGDFGD
+GFDGFDGF  DGFDGFD
+
+fsdSDDSFCSgfdgfd
+
+
+gGFGFDGDFGFDGDFGDF
+
+root@ubuntu:/home/ndr# cat script
+#!/bin/bash
+FILE=$1
+if [ -f $FILE ]; then
+   echo "The file '$FILE' exists." && tr -s '\n' < $FILE | tr '[:lower:]' '[:upper:]'
+else
+   echo "The file '$FILE' in not found."
+fi
+
+root@ubuntu:/home/ndr# ./script test
+The file 'test' exists.
+GDFGFD   GDFGFDGFD
+ASADKLGFD    GFDGFDGDFGDFGD
+GFDGFDGF  DGFDGFD
+FSDSDDSFCSGFDGFD
+GGFGFDGDFGFDGDFGDF
+====================================================================================================================================
+
+
+root@ubuntu:/home/ndr/TEST# cat script1
+#!/bin/bash
+FILE=$1
+count=0
+file="00"
+text="Файл 00"
+if [ -d $FILE ]; then
+        echo "The file '$FILE' exists."
+else
+mkdir -p $FILE/20{10..17}/{01..12}
+
+for i in {2010..2017}
+do
+
+           for j in {01..12}
+          do
+                count=$[count+1]
+                echo ${text}${count} > $FILE/$i/$j/${file}${count}.txt
+          done
+done
+fi
