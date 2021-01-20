@@ -1,0 +1,84 @@
+root@ubuntu:/home/ndr# cat /etc/netplan/00-installer-config.yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    eth0:
+      dhcp4: true
+  version: 2
+
+root@ubuntu:/home/ndr# cat /etc/netplan/00-installer-config.yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    eth0:
+       addresses:
+               - 192.168.7.31/24
+       gateway4: 192.168.7.1
+       nameservers:
+            addresses: [192.168.7.7, 192.168.11.11]
+            search:
+               - dlmed.local
+       optional: true
+  version: 2
+root@ubuntu:/home/ndr#
+
+
+ netplan try
+Warning: Stopping systemd-networkd.service, but it can still be activated by:
+  systemd-networkd.socket
+Do you want to keep these settings?
+
+
+Press ENTER before the timeout to accept the new configuration
+
+
+Changes will revert in 108 seconds
+Configuration accepted.
+root@ubuntu:/home/ndr#
+=====================================================================
+
+была dhcp, перевел на статику.
+
+=====================================================================
+
+при изменении днс на 1.1.1.1 ничего не открывается через браузер
+
+=====================================================================
+root@ubuntu:/home/ndr# iptables -A INPUT -s 192.168.7.0/24 -p tcp --dport 22 -j ACCEPT
+root@ubuntu:/home/ndr# iptables -P INPUT DROP
+
+root@ubuntu:/home/ndr# iptables -A INPUT -p tcp --dport 80 -j ACCEPT                                                                                                                                                                         root@ubuntu:/home/ndr# iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+root@ubuntu:/home/ndr# iptables -n -L -v --line-numbers
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+1      186 15200 ACCEPT     tcp  --  *      *       192.168.7.0/24       0.0.0.0                                                                                                                                                             /0            tcp dpt:22
+2        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0                                                                                                                                                             /0            tcp dpt:80
+3        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0                                                                                                                                                             /0            tcp dpt:443
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+
+Chain OUTPUT (policy ACCEPT 5 packets, 776 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+================================================================
+root@ubuntu:/home/ndr# iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+
+root@ubuntu:/home/ndr# iptables -t nat -L
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination
+REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:http-alt redir ports 80
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination
+
+
+
+
+
+
