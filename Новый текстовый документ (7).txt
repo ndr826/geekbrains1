@@ -103,5 +103,43 @@ Nameserver 3
 
 ========================================================================================================================
 
+Status Active
+
+
+  
+
+
+
+
+
+  
+
+
+Congratulations! You have successfully activated grog.ml. Your site will now receive the benefits of Cloudflare’s performance, security and reliability features. Check out reports of bandwidth saved* and threats blocked on your account Analytics page. 
+
+Visit our Welcome Center for helpful resources for new customers. Also, check out the Cloudflare Status Page and our Blog for real time updates and news. 
+
+For common questions or to reach our Support team, visit https://support.cloudflare.com/. 
+
+Thank you, 
+The Cloudflare Team 
+
+For your records, this is a confirmation of your nameserver change before Cloudflare and on Cloudflare: 
+
+
+  
+
+
+Before:
+ns01.freenom.com ns02.freenom.com ns03.freenom.com ns04.freenom.com
+
+Current:
+jeremy.ns.cloudflare.com
+leah.ns.cloudflare.com 
+
+
+
+
+
 
 
