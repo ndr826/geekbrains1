@@ -1,0 +1,46 @@
+=====================================================================
+root@ubuntu:/home/ndr# iptables -A INPUT -s 192.168.7.26 -p tcp --dport 22 -j ACCEPT
+root@ubuntu:/home/ndr# iptables -P INPUT DROP
+
+root@ubuntu:/home/ndr# iptables -A INPUT -p tcp --dport 80 -j ACCEPT                                                                                                                                                                         root@ubuntu:/home/ndr# iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+root@ubuntu:/home/ndr# iptables -n -L -v --line-numbers
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+1      186 15200 ACCEPT     tcp  --  *      *       192.168.7.26/32      0.0.0.0                                                                                                                                                             /0            tcp dpt:22
+2        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0                                                                                                                                                             /0            tcp dpt:80
+3        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0                                                                                                                                                             /0            tcp dpt:443
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+
+Chain OUTPUT (policy ACCEPT 5 packets, 776 bytes)
+num   pkts bytes target     prot opt in     out     source               destina                                                                                                                                                             tion
+================================================================
+root@ubuntu:/home/ndr# iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+
+root@ubuntu:/home/ndr# iptables -t nat -L
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination
+REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:http-alt redir ports 80
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination
+
+root@ubuntu:/home/ndr# iptables -L
+Chain INPUT (policy DROP)
+target     prot opt source               destination
+ACCEPT     tcp  --  192.168.7.26/32      anywhere             tcp dpt:ssh
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:http
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:https
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
