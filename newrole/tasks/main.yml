@@ -1,0 +1,25 @@
+---
+# tasks file for newrole
+- name: ansible create directory with mode setting example
+  file:
+    path: /home/ndr/directory
+    state: directory
+#    mode: "u=rw,g=wx,o=rwx"
+- name: ansible create file
+  file:
+    path: "/home/ndr/directory/test.txt"
+    state: touch
+    
+- name: Ensure group test exists
+  ansible.builtin.group:
+    name: test
+    gid: 2011
+    state: present
+
+- name: Add the user 
+  ansible.builtin.user:
+    name: test
+    shell: /bin/bash
+    groups: test, sudo
+    password: "{{ password }}"
+    append: yes
