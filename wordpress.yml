@@ -4,7 +4,7 @@
      - roles/wordpress/vars/wordpress.yml
      - roles/wordpress/vars/wordpress_vault.yml
    roles:
-     - { role: geerlingguy.nginx, tags: [nginx]}
-     - { role: geerlingguy.php, tags: [ php]}
+     - { role: ansible-role-nginx, tags: [nginx]}
+     - { role: ansible-role-php, tags: [ php]}
      - { role: ansible-role-mysql, tags: [mysql]}
      - { role: wordpress, tags: [wordpress]}
