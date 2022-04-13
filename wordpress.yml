@@ -6,5 +6,5 @@
    roles:
      - { role: geerlingguy.nginx, tags: [nginx]}
      - { role: geerlingguy.php, tags: [ php]}
-     - { role: geerlingguy.mysql, tags: [mysql]}
+     - { role: ansible-role-mysql, tags: [mysql]}
      - { role: wordpress, tags: [wordpress]}
