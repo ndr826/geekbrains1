@@ -1,4 +1,6 @@
 ---
+ - import_playbook: webservers.yml
+ - import_playbook: mysql.yml
  - hosts: localhost
    vars_files:
      - roles/wordpress/vars/wordpress.yml
