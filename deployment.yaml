@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      hostNetwork: true
+      serviceAccountName: kubedoom
+      containers:
+      - image: storaxdev/kubedoom:0.5.0
+        name: kubedoom
+        ports:
+        - name: portsdoom
+          containerPort: 5900
+          protocol: TCP
