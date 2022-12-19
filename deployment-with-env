@@ -30,6 +30,10 @@ spec:
           value: testdatabase
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+          - name: data
+            mountPath: /var/lib/postgresql/data/pgdata
+            subPath: postgres-storage
         ports:
         - name: portsdoom
           containerPort: 5432
