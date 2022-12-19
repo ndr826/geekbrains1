@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgsql
+spec:
+  replicas: 1
+  strategy:
+     type: Recreate
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: postgres:10.13
+        name: postgres
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secretdb
+              key: PASS
+        - name: POSTGRES_USER
+          value: testuser
+        - name: POSTGRES_DB
+          value: testdatabase
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - name: portsdoom
+          containerPort: 5432
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 500m
+            memory: 300Mi
+          limits:
+            cpu: 500m
+            memory: 300Mi
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pgsql
