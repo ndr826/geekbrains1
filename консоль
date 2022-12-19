@@ -1,0 +1,68 @@
+kubectl get pod -o wide -n gb4
+NAME                          READY   STATUS              RESTARTS   AGE    IP             NODE                             NOMINATED NODE   READINESS GATES
+pgsql-7b75bd6b6f-ds2g2        0/1     ContainerCreating   0          6s     <none>         kubernetes-cluster-gb-group1-0   <none>           <none>
+postgresql-56f7886d47-h6pgd   0/1     ImagePullBackOff    0          31h    10.100.92.84   kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-7g7p2       0/1     Init:0/1            0          3d4h   <none>         kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-jdcbw       1/1     Running             2          3d4h   10.100.86.84   kubernetes-cluster-gb-group1-1   <none>           <none>
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl get pod -o wide -n gb4
+NAME                          READY   STATUS             RESTARTS   AGE    IP               NODE                             NOMINATED NODE   READINESS GATES
+pgsql-7b75bd6b6f-ds2g2        1/1     Running            0          12s    10.100.187.216   kubernetes-cluster-gb-group1-0   <none>           <none>
+postgresql-56f7886d47-h6pgd   0/1     ImagePullBackOff   0          31h    10.100.92.84     kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-7g7p2       0/1     Init:0/1           0          3d4h   <none>           kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-jdcbw       1/1     Running            2          3d4h   10.100.86.84     kubernetes-cluster-gb-group1-1   <none>           <none>
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# vim deployment-with-env.yaml
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl run -t -i --rm --image postgres:10.13 test bash
+If you don't see a command prompt, try pressing enter.
+root@test:/# kubectl get pod -o wide -bn gb4
+bash: kubectl: command not found
+root@test:/# psql -h 10.100.187.216 -U testuser testdatabase
+Password for user testuser:
+psql (10.13 (Debian 10.13-1.pgdg90+1))
+Type "help" for help.
+
+testdatabase=# CREATE TABLE testtable (testcolumn VARCHAR (50) );
+CREATE TABLE
+testdatabase=# \dt
+           List of relations
+ Schema |   Name    | Type  |  Owner
+--------+-----------+-------+----------
+ public | testtable | table | testuser
+(1 row)
+
+testdatabase=# \q
+root@test:/# exit
+exit
+Session ended, resume using 'kubectl attach test -c test -i -t' command when the pod is running
+pod "test" deleted
+
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl delete -f deployment-with-env.yaml -n gb4
+deployment.apps "pgsql" deleted
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl apply -f deployment-with-env.yaml -n gb4
+deployment.apps/pgsql created
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl get pod -o wide -n gb4
+NAME                          READY   STATUS              RESTARTS   AGE    IP             NODE                             NOMINATED NODE   READINESS GATES
+pgsql-7b75bd6b6f-8mc2k        0/1     ContainerCreating   0          6s     <none>         kubernetes-cluster-gb-group1-0   <none>           <none>
+postgresql-56f7886d47-h6pgd   0/1     ImagePullBackOff    0          31h    10.100.92.84   kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-7g7p2       0/1     Init:0/1            0          3d4h   <none>         kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-jdcbw       1/1     Running             2          3d4h   10.100.86.84   kubernetes-cluster-gb-group1-1   <none>           <none>
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl get pod -o wide -n gb4
+NAME                          READY   STATUS             RESTARTS   AGE    IP               NODE                             NOMINATED NODE   READINESS GATES
+pgsql-7b75bd6b6f-8mc2k        1/1     Running            0          10s    10.100.187.217   kubernetes-cluster-gb-group1-0   <none>           <none>
+postgresql-56f7886d47-h6pgd   0/1     ImagePullBackOff   0          31h    10.100.92.84     kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-7g7p2       0/1     Init:0/1           0          3d4h   <none>           kubernetes-cluster-gb-group1-2   <none>           <none>
+webdav-7d6747f7c8-jdcbw       1/1     Running            2          3d4h   10.100.86.84     kubernetes-cluster-gb-group1-1   <none>           <none>
+root@docker:/home/ndr/geekbrains-conteinerization/practice/4.resources-and-persistence# kubectl run -t -i --rm --image postgres:10.13 test bash
+If you don't see a command prompt, try pressing enter.
+root@test:/# psql -h 10.100.187.217 -U testuser testdatabase
+Password for user testuser:
+psql (10.13 (Debian 10.13-1.pgdg90+1))
+Type "help" for help.
+
+testdatabase=# \dt
+           List of relations
+ Schema |   Name    | Type  |  Owner
+--------+-----------+-------+----------
+ public | testtable | table | testuser
+(1 row)
+
+testdatabase=#
