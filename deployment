@@ -1,1 +1,86 @@
+ ls
+deployment-pg.yaml  deployment-redmine.yaml  deployment-with-probes.yaml  ingress.yaml  net-tool.yaml  pvc.yaml  service-pg.yaml  service-redmine.yaml  service-rm.yaml  service.yaml
+
+
+cat deployment-redmine.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine-app
+  namespace: redmine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redmine-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redmine-app
+    spec:
+      containers:
+      - image: redmine:4.1.1
+        name: redmine
+        env:
+          - name: REDMINE_DB_POSTGRES
+            value: "pg-service"
+          - name: REDMINE_DB_USERNAME
+            value: "rm_db_user"
+          - name: REDMINE_DB_DATABASE
+            value: "rm_db_database"
+          - name: REDMINE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-secret
+                key: PASS
+          - name: REDMINE_SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                name: redmine-secret
+                key: KEY
+        ports:
+        - containerPort: 3000
+
+
+ cat service-redmine.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redmine-service
+  namespace: redmine
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: redmine-app
+  type: ClusterIP
+
+
+cat pvc.yaml
+
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pg-storage
+  namespace: redmine
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests
+      storage: 10Gi
+  storageClassName: "csi-ceph-ssd-ms1"
+  
+  
+  
+
+
+
+
 
