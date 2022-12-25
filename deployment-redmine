@@ -1,0 +1,41 @@
+root@docker:/home/ndr/geekbrains-conteinerization/practice/5.kubernetes-network# vim deployment-redmine.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine-app
+  namespace: gb4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redmine-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redmine-app
+    spec:
+      containers:
+      - image: redmine:4.1.1
+        name: redmine
+        env:
+          - name: REDMINE_DB_POSTGRES
+            value: "database"
+          - name: REDMINE_DB_USERNAME
+            value: "testuser"
+          - name: REDMINE_DB_DATABASE
+            value: "testdatabase"
+          - name: REDMINE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: my-secretdb
+                key: PASS
+          - name: REDMINE_SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                name: redmine-secret
+                key: KEY
+        ports:
+        - containerPort: 3000
